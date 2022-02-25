@@ -1,5 +1,6 @@
 # %%
 from tkinter import Tk, filedialog
+from typing import TextIO
 root = Tk()
 root.withdraw()
 
@@ -29,14 +30,26 @@ with filedialog.askopenfile(title="Open word index file") as file:
         print("Word not found in index file")
 
 # %%
-indexes = [int(i) for i in indexes]
-print(word, indexes)
+
+
+def find_in_corpus(index, word, corpus: TextIO):
+    padding = 25
+    corpus.seek(index - padding)
+    return corpus.read(len(word) + padding * 2).strip().replace("\n", " ")
+
 
 # %%
-to_print = 10
-if len(indexes) > to_print:
-    for index in indexes[:to_print]:
-        pass
-    print("[...]")
-    for index in indexes[-to_print:]:
-        pass
+with filedialog.askopenfile(title="Corpus text file") as corpus:
+    to_print = 10
+    int_indexes = [int(i) for i in indexes]
+    results = len(int_indexes)
+    print("Number of occurrences:", results)
+    if results > to_print * 2:
+        for index in int_indexes[:to_print]:
+            print(find_in_corpus(index, word, corpus))
+        print("[...]")
+        for index in int_indexes[-to_print:]:
+            print(find_in_corpus(index, word, corpus))
+    else:
+        for index in int_indexes:
+            print(find_in_corpus(index, word, corpus))
