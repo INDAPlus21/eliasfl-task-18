@@ -33,3 +33,10 @@ indexes = [int(i) for i in indexes]
 print(word, indexes)
 
 # %%
+to_print = 10
+if len(indexes) > to_print:
+    for index in indexes[:to_print]:
+        pass
+    print("[...]")
+    for index in indexes[-to_print:]:
+        pass
