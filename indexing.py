@@ -11,7 +11,7 @@ with filedialog.askopenfile(title="Tokens file") as tokens:
 
 # %%
 print("Splitting words")
-obj_words = (word.strip().split() for word in words)
+obj_words = (word.split() for word in words)
 
 
 # %%
@@ -22,7 +22,8 @@ grouped = (list(g) for k, g in groupby(obj_words, key=lambda x: x[0]))
 # %%
 print("Combining group to single line")
 combined = (
-    f"{items[0][0]} {' '.join(b for a, b in items)}" for items in grouped)
+    f"{items[0][0]} "
+    f"{' '.join(sorted((b for a, b in items), key=lambda x: int(x)))}" for items in grouped)
 
 
 # %%
@@ -32,5 +33,8 @@ with filedialog.asksaveasfile(
         initialfile="index.txt",
         confirmoverwrite=False,
         mode="w") as index:
+    print("Writing to file")
     index.writelines(f"{line}\n" for line in combined)
 print("Done!")
+
+# %%
